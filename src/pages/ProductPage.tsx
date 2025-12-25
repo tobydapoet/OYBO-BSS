@@ -7,6 +7,8 @@ import { Heart } from "lucide-react";
 import { getCollectionByLabel } from "../api/collection.api";
 import type { CollectionRes } from "../types/Collection.type";
 import ProductCard from "../components/ProductCard";
+import { useCart } from "../contexts/CartContext";
+import { formatMoney } from "../utils/formatMoney";
 
 function ProductPage() {
   const { handle } = useParams();
@@ -15,8 +17,7 @@ function ProductPage() {
   const [selectedVariant, setSelectedVariant] = useState<VariantType>();
   const [optionProduct, setOptionProduct] = useState<ProductType[]>([]);
   const [currentCollection, setCurrentCollection] = useState<CollectionRes>();
-
-  console.log(product);
+  const { addToCart, messageAddError } = useCart();
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -66,8 +67,6 @@ function ProductPage() {
     if (!id) throw new Error("Invalid Shopify GID");
     return id;
   };
-
-  console.log("COLLECTION: ", currentCollection);
 
   const handleSizeSelect = (variant: VariantType) => {
     setSelectedVariant(variant);
@@ -120,13 +119,15 @@ function ProductPage() {
     return false;
   };
 
-  if (!product) {
+  if (!product || !selectedVariant) {
     return (
       <div className="flex justify-center items-center min-h-screen">
         Loading...
       </div>
     );
   }
+
+  console.log("VARIANT: ", selectedVariant);
 
   return (
     <div>
@@ -158,9 +159,10 @@ function ProductPage() {
           </div>
 
           <div className="text-base mt-8">
-            €
-            {selectedVariant?.price?.amount ||
-              product.variants.edges[0]?.node.price.amount}
+            {formatMoney(
+              selectedVariant?.price?.amount ||
+                product.variants.edges[0]?.node.price.amount
+            )}
           </div>
 
           <div>
@@ -212,8 +214,8 @@ function ProductPage() {
                             isSelected
                               ? "underline"
                               : variantForSize
-                              ? "hover:underline"
-                              : "underline"
+                                ? "hover:underline"
+                                : "underline"
                           }`}
                           key={idx}
                           onClick={() =>
@@ -229,11 +231,19 @@ function ProductPage() {
                 </div>
               );
             })}
-            <div className="flex gap-2 items-center mt-8">
-              <button className="lg:w-full px-2 lg:px-0 bg-black h-10 text-white">
-                ADD TO CART
-              </button>
-              <Heart strokeWidth={1.5} size={20} />
+            <div className="mt-8">
+              {messageAddError && (
+                <div className="text-sm mb-1">{messageAddError?.message}</div>
+              )}
+              <div className="flex gap-2 items-center">
+                <button
+                  className="lg:w-full px-2 lg:px-0 bg-black h-10 text-white cursor-pointer"
+                  onClick={async () => await addToCart(selectedVariant?.id, 1)}
+                >
+                  ADD TO CART
+                </button>
+                <Heart strokeWidth={1.5} size={20} />
+              </div>
             </div>
           </div>
           <div

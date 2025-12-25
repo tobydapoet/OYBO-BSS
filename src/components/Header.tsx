@@ -8,6 +8,8 @@ import { getCollectionsByKeyword } from "../api/collection.api";
 import { splitCollectionsByPrefix } from "../utils/splitCollectionts";
 import Cookies from "js-cookie";
 import type { SplitCollectionsResult } from "../types/Collection.type";
+import MiniCart from "./MiniCart";
+import { useCart } from "../contexts/CartContext";
 
 type DropdownType = "man" | "woman" | null;
 
@@ -15,8 +17,10 @@ function Header() {
   const [activeDropdown, setActiveDropdown] = useState<DropdownType>(null);
   const [isSearchOpen, setIsSearchOpen] = useState<boolean>(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
+  const [isOpenMiniCart, setIsOpenMiniCart] = useState(false);
   const navigate = useNavigate();
   const [collections, setCollections] = useState<SplitCollectionsResult>();
+  const { cart } = useCart();
 
   useEffect(() => {
     const fetchCollections = async () => {
@@ -204,10 +208,11 @@ function Header() {
                 </button>
 
                 <button
-                  className="p-2 rounded-full transition-colors relative"
+                  className="p-2 rounded-full transition-colors relative hover:underline cursor-pointer"
                   aria-label="Cart"
+                  onClick={() => setIsOpenMiniCart(true)}
                 >
-                  CART(0)
+                  CART({cart?.lines.edges.length})
                 </button>
               </div>
             </div>
@@ -282,6 +287,10 @@ function Header() {
       <MiniMenu
         onClose={() => setIsMobileMenuOpen(false)}
         isOpen={isMobileMenuOpen}
+      />
+      <MiniCart
+        onClose={() => setIsOpenMiniCart(false)}
+        isOpen={isOpenMiniCart}
       />
     </>
   );
