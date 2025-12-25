@@ -127,8 +127,6 @@ function ProductPage() {
     );
   }
 
-  console.log("VARIANT: ", selectedVariant);
-
   return (
     <div>
       <div className="flex flex-col lg:flex-row gap-15 2xl:gap-30 2xl:items-center">

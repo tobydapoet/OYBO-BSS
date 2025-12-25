@@ -5,11 +5,15 @@ import type { CollectionRes } from "../types/Collection.type";
 import ProductCard from "../components/ProductCard";
 import { formatMoney } from "../utils/formatMoney";
 import { Heart, Plus } from "lucide-react";
+// import type { ProductType } from "../types/Product.type";
+import MiniView from "../components/MiniView";
 
 function CollectionPage() {
   const { label } = useParams();
   const [collection, setCollection] = useState<CollectionRes>();
   const navigate = useNavigate();
+  const [openMiniView, setOpenMiniView] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<string>();
 
   useEffect(() => {
     const fetchCollections = async () => {
@@ -27,6 +31,8 @@ function CollectionPage() {
       </div>
     );
   }
+
+  console.log("OPEN: ", openMiniView);
 
   return (
     <div className="px-2">
@@ -109,7 +115,19 @@ function CollectionPage() {
                         </div>
                         <div className="flex gap-3 items-start mt-1 mr-2">
                           <Heart strokeWidth={1.5} size={18} />
-                          <Plus strokeWidth={1.5} size={18} />
+                          <Plus
+                            strokeWidth={1.5}
+                            size={18}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              setOpenMiniView(true);
+                              setSelectedProduct(
+                                collection.products.edges[startIndex + 4].node
+                                  .handle
+                              );
+                            }}
+                          />
                         </div>
                       </div>
                     </>
@@ -120,7 +138,14 @@ function CollectionPage() {
                   {collection.products.edges
                     .slice(startIndex + 5, startIndex + 9)
                     .map((product, idx) => (
-                      <ProductCard key={`row2-${idx}`} product={product} />
+                      <ProductCard
+                        key={`row2-${idx}`}
+                        product={product}
+                        onPlus={() => {
+                          setSelectedProduct(product.node.handle);
+                          setOpenMiniView(true);
+                        }}
+                      />
                     ))}
                 </div>
               </div>
@@ -138,6 +163,11 @@ function CollectionPage() {
           ))}
         </div>
       </div>
+      <MiniView
+        onClose={() => setOpenMiniView(false)}
+        isOpen={openMiniView}
+        productHandle={selectedProduct!}
+      />
     </div>
   );
 }

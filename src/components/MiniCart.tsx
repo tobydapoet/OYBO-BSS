@@ -26,8 +26,6 @@ function MiniCart({ onClose, isOpen = true }: MiniCartProps) {
     }, 0);
   };
 
-  console.log("ERROR: ", messageUpdateError);
-
   return (
     <>
       <div

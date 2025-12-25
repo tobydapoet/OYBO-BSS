@@ -167,8 +167,6 @@ export const updateCartLine = async (
   quantity: number
 ) => {
   const variant = await checkVariantAvailable(variantGid);
-  console.log("ID: ", variantGid);
-  console.log("AVAILABLE: ", variant);
   if (!variant.availableForSale || variant.quantityAvailable < quantity) {
     throw new Error(
       `Only ${variant.quantityAvailable} items were added to your cart due to availability.`

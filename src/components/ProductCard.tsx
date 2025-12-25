@@ -2,7 +2,12 @@ import { Heart, Plus } from "lucide-react";
 import { formatMoney } from "../utils/formatMoney";
 import type { SummaryProduct } from "../types/Product.type";
 
-const ProductCard = ({ product }: { product: SummaryProduct }) => {
+type ProductCardProps = {
+  onPlus?: () => void;
+  product: SummaryProduct;
+};
+
+const ProductCard = ({ product, onPlus }: ProductCardProps) => {
   return (
     <a
       className="relative w-full overflow-hidden group cursor-pointer"
@@ -29,7 +34,15 @@ const ProductCard = ({ product }: { product: SummaryProduct }) => {
         </div>
         <div className="flex gap-3 items-start mt-1 mr-2">
           <Heart strokeWidth={1.5} size={18} />
-          <Plus strokeWidth={1.5} size={18} />
+          <Plus
+            strokeWidth={1.5}
+            size={18}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              onPlus?.();
+            }}
+          />
         </div>
       </div>
     </a>

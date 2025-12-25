@@ -70,7 +70,6 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       setLoading(false);
     }
   };
-  console.log("Cart: ", cart);
 
   const updateQuantity = async (
     lineId: string,
