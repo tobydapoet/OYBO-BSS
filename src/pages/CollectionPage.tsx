@@ -7,6 +7,8 @@ import { formatMoney } from "../utils/formatMoney";
 import { Heart, Plus } from "lucide-react";
 // import type { ProductType } from "../types/Product.type";
 import MiniView from "../components/MiniView";
+import MiniCart from "../components/MiniCart";
+import { useCart } from "../contexts/CartContext";
 
 function CollectionPage() {
   const { label } = useParams();
@@ -14,6 +16,8 @@ function CollectionPage() {
   const navigate = useNavigate();
   const [openMiniView, setOpenMiniView] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<string>();
+  const [isOpenMiniCart, setIsOpenMiniCart] = useState(false);
+  const { addToCart } = useCart();
 
   useEffect(() => {
     const fetchCollections = async () => {
@@ -144,6 +148,7 @@ function CollectionPage() {
                         onPlus={() => {
                           setSelectedProduct(product.node.handle);
                           setOpenMiniView(true);
+                          setTimeout(() => setOpenMiniView(true), 300);
                         }}
                       />
                     ))}
@@ -167,6 +172,11 @@ function CollectionPage() {
         onClose={() => setOpenMiniView(false)}
         isOpen={openMiniView}
         productHandle={selectedProduct!}
+        onAddToCart={() => setIsOpenMiniCart(true)}
+      />
+      <MiniCart
+        onClose={() => setIsOpenMiniCart(false)}
+        isOpen={isOpenMiniCart}
       />
     </div>
   );

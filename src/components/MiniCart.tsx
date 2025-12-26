@@ -9,10 +9,6 @@ type MiniCartProps = {
 };
 
 function MiniCart({ onClose, isOpen = true }: MiniCartProps) {
-  useEffect(() => {
-    const fetchCollections = async () => {};
-    fetchCollections();
-  }, []);
   const [quantities, setQuantities] = useState<{ [id: string]: number }>({});
 
   const { cart, updateQuantity, loading, messageUpdateError } = useCart();
@@ -147,7 +143,7 @@ function MiniCart({ onClose, isOpen = true }: MiniCartProps) {
                         onClick={() =>
                           updateQuantity(
                             variant.node.id,
-                            variant.node.quantity - 1,
+                            0,
                             variant.node.merchandise.id
                           )
                         }

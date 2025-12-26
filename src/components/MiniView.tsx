@@ -1,27 +1,31 @@
-import { Minus, MoveDiagonal2, Plus, X } from "lucide-react";
+import { Minus, Plus, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import type { ProductType, VariantType } from "../types/Product.type";
-import type { CollectionRes } from "../types/Collection.type";
 import { useCart } from "../contexts/CartContext";
 import { getProductByHandle, searchProducts } from "../api/product.api";
-import { getCollectionByLabel } from "../api/collection.api";
 import { useNavigate } from "react-router-dom";
 
 type MiniViewProps = {
   onClose: () => void;
   isOpen?: boolean;
   productHandle: string;
+  onAddToCart: () => void;
 };
 
-function MiniView({ onClose, isOpen = true, productHandle }: MiniViewProps) {
+function MiniView({
+  onClose,
+  isOpen = true,
+  productHandle,
+  onAddToCart,
+}: MiniViewProps) {
   const [product, setProduct] = useState<ProductType>();
   const [selectedVariant, setSelectedVariant] = useState<VariantType>();
   const [optionProduct, setOptionProduct] = useState<ProductType[]>([]);
-  const [currentCollection, setCurrentCollection] = useState<CollectionRes>();
+  // const [currentCollection, setCurrentCollection] = useState<CollectionRes>();
   const navigate = useNavigate();
   const [quantity, setQuantity] = useState<number>(1);
 
-  const { addToCart, messageAddError } = useCart();
+  const { addToCart, messageAddError, setMessageAddError } = useCart();
 
   const isSizeSelected = (size: string): boolean => {
     if (!selectedVariant?.selectedOptions) return false;
@@ -86,12 +90,12 @@ function MiniView({ onClose, isOpen = true, productHandle }: MiniViewProps) {
       const res = await getProductByHandle(productHandle);
       const keyword = productHandle.split("-")[0];
       const sameProduct = await searchProducts(keyword);
-      const collection = await getCollectionByLabel(
-        res.collections.edges[0].node.handle
-      );
-      if (collection) {
-        setCurrentCollection(collection);
-      }
+      // const collection = await getCollectionByLabel(
+      //   res.collections.edges[0].node.handle
+      // );
+      // if (collection) {
+      //   setCurrentCollection(collection);
+      // }
 
       const twoWordProducts = sameProduct.filter(
         (p: any) => p.handle.split("-").length === 2
@@ -131,6 +135,7 @@ function MiniView({ onClose, isOpen = true, productHandle }: MiniViewProps) {
         }`}
         onClick={() => {
           onClose();
+          setMessageAddError("");
           setQuantity(1);
         }}
       />
@@ -177,7 +182,11 @@ function MiniView({ onClose, isOpen = true, productHandle }: MiniViewProps) {
           </svg>
           <div className="flex items-center justify-between">
             <button
-              onClick={onClose}
+              onClick={() => {
+                onClose();
+                setMessageAddError("");
+                setQuantity(1);
+              }}
               className="rounded-full transition-colors"
               aria-label="Close menu"
             >
@@ -251,13 +260,16 @@ function MiniView({ onClose, isOpen = true, productHandle }: MiniViewProps) {
                 <div className="flex gap-2 items-center">
                   <button
                     className="px-2 text-sm bg-black p-1 text-white cursor-pointer"
-                    onClick={async () =>
-                      await addToCart(
+                    onClick={async () => {
+                      const res = await addToCart(
                         selectedVariant?.id ||
                           product.variants.edges[0].node.id,
-                        1
-                      )
-                    }
+                        quantity
+                      );
+                      if (res === true) {
+                        setTimeout(() => onAddToCart(), 1000);
+                      }
+                    }}
                   >
                     Add to cart
                   </button>

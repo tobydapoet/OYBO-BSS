@@ -16,7 +16,7 @@ import type { CartType } from "../types/Cart.type";
 type CartContextType = {
   cart: CartType | undefined;
   loading: boolean;
-  addToCart: (variantGid: string, quantity?: number) => Promise<void>;
+  addToCart: (variantGid: string, quantity?: number) => Promise<boolean>;
   refreshCart: () => Promise<void>;
   updateQuantity: (
     lineId: string,
@@ -25,6 +25,7 @@ type CartContextType = {
   ) => Promise<void>;
   messageAddError: any;
   messageUpdateError: any;
+  setMessageAddError: React.Dispatch<React.SetStateAction<string>>;
 };
 
 const CartContext = createContext<CartContextType | null>(null);
@@ -33,7 +34,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [cartId, setCartId] = useState<string | null>(null);
   const [cart, setCart] = useState<CartType>();
   const [loading, setLoading] = useState(false);
-  const [messageAddError, setMessageAddError] = useState();
+  const [messageAddError, setMessageAddError] = useState<string>("");
   const [messageUpdateError, setMessageUpdateError] = useState();
 
   useEffect(() => {
@@ -59,13 +60,16 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const addToCart = async (variantGid: string, quantity = 1) => {
-    if (!cartId) return;
+    if (!cartId) throw new Error("No cart id");
+
     setLoading(true);
     try {
       await apiAddToCart(cartId, variantGid, quantity);
       await refreshCart();
+      return true;
     } catch (err: any) {
       setMessageAddError(err);
+      throw err;
     } finally {
       setLoading(false);
     }
@@ -99,6 +103,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         updateQuantity,
         messageAddError,
         messageUpdateError,
+        setMessageAddError,
       }}
     >
       {children}
