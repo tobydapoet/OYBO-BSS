@@ -123,6 +123,7 @@ export const getCart = async (cartId: string): Promise<CartType> => {
                   title
                   product {
                     title
+                    handle
                     images(first: 1) {
                     edges {
                         node {

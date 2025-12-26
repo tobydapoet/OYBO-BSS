@@ -1,6 +1,7 @@
 export type CartType = {
   id: string;
   checkoutUrl: string;
+
   lines: {
     edges: {
       node: {
@@ -14,6 +15,7 @@ export type CartType = {
           };
           product: {
             title: string;
+            handle: string;
             images: {
               edges: {
                 node: {

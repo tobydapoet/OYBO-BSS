@@ -1,5 +1,5 @@
 import { Minus, Plus, X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useCart } from "../contexts/CartContext";
 import { formatMoney } from "../utils/formatMoney";
 
