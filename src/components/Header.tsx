@@ -10,6 +10,7 @@ import Cookies from "js-cookie";
 import type { SplitCollectionsResult } from "../types/Collection.type";
 import MiniCart from "./MiniCart";
 import { useCart } from "../contexts/CartContext";
+import SearchBar from "./SearchBar";
 
 type DropdownType = "man" | "woman" | null;
 
@@ -150,11 +151,11 @@ function Header() {
                   }}
                 />
 
-                <button className="pr-2 relative">
+                <button
+                  className="pr-2 relative"
+                  onClick={() => setIsOpenMiniCart(true)}
+                >
                   <ShoppingBag className="w-5 h-5" strokeWidth={1} />
-                  <span className="absolute -top-1 -right-1 bg-black text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
-                    0
-                  </span>
                 </button>
               </div>
 
@@ -162,27 +163,11 @@ function Header() {
                 <div className="relative">
                   <button
                     onClick={() => setIsSearchOpen(!isSearchOpen)}
-                    className="p-2 rounded-full transition-colors"
+                    className="p-2 rounded-full transition-colors cursor-pointer"
                     aria-label="Search"
                   >
                     SEARCH
                   </button>
-
-                  {isSearchOpen && (
-                    <div className="absolute right-0 mt-2 w-72 bg-white shadow-lg rounded-lg p-4 border border-gray-200">
-                      <div className="flex items-center">
-                        <input
-                          type="text"
-                          placeholder="SEARCH"
-                          className="flex-1 px-3 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
-                          autoFocus
-                        />
-                        <button className="bg-black text-white px-4 py-2 rounded-r-lg hover:bg-gray-800 transition-colors">
-                          SEARCH
-                        </button>
-                      </div>
-                    </div>
-                  )}
                 </div>
 
                 <button
@@ -292,6 +277,7 @@ function Header() {
         onClose={() => setIsOpenMiniCart(false)}
         isOpen={isOpenMiniCart}
       />
+      <SearchBar onClose={() => setIsSearchOpen(false)} isOpen={isSearchOpen} />
     </>
   );
 }

@@ -4,19 +4,16 @@ const RotatingBanner = () => {
   const banners = [
     {
       id: 1,
-      content: "Title 1",
       bgClass: "bg-black",
       textClass: "text-white",
     },
     {
       id: 2,
-      content: "Title 2",
       bgClass: "bg-pink-300",
       textClass: "text-white",
     },
     {
       id: 3,
-      content: "Title 3",
       bgClass: "bg-amber-800",
       textClass: "text-white",
     },
@@ -57,7 +54,7 @@ const RotatingBanner = () => {
               : "translate-y-0 opacity-100"
           }`}
       >
-        {displayBanner.content}
+        {/* {displayBanner.content} */}
       </div>
     </div>
   );

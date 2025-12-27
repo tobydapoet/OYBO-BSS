@@ -9,6 +9,7 @@ import MainLayout from "./Layout/MainLayout";
 import RegisterPage from "./pages/RegisterPage";
 import ProductPage from "./pages/ProductPage";
 import Cartpage from "./pages/CartPage";
+import SearchPage from "./pages/SearchPage";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/products/:handle" element={<ProductPage />} />
           <Route path="/cart" element={<Cartpage />} />
+          <Route path="/search" element={<SearchPage />} />
         </Route>
 
         <Route path="/login" element={<LoginPage />} />

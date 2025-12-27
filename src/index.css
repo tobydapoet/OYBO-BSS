@@ -2,19 +2,16 @@
 @import "@fontsource/onest";
 
 * {
-  font-family: "Onest", sans-serif;
+  font-family: "Inter", sans-serif;
 }
 
-@font-face {
-  font-family: "Coral Blush Script Alt";
-  src: url("/src/assets/fonts/coral-blush-script-alt.otf") format("opentype");
-  font-weight: normal;
-  font-style: normal;
-}
+
 
 .font-coral {
   font-family: "Coral Blush Script Alt", cursive;
 }
+
+
 
 /* :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;

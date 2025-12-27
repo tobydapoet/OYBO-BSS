@@ -21,7 +21,6 @@ function MiniView({
   const [product, setProduct] = useState<ProductType>();
   const [selectedVariant, setSelectedVariant] = useState<VariantType>();
   const [optionProduct, setOptionProduct] = useState<ProductType[]>([]);
-  // const [currentCollection, setCurrentCollection] = useState<CollectionRes>();
   const navigate = useNavigate();
   const [quantity, setQuantity] = useState<number>(1);
 

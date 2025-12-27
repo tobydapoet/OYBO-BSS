@@ -98,6 +98,22 @@ export const searchProducts = async (keyword: string, first = 6) => {
                 currencyCode
               }
             }
+            variants(first: 10) {
+              edges {
+                node {
+                  id
+                  title
+                  selectedOptions {
+                    name
+                    value
+                  }
+                  price {
+                    amount
+                    currencyCode
+                  }
+                }
+              }
+            }
           }
         }
       }
